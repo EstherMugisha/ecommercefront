@@ -1,9 +1,15 @@
-import React from 'react'
+import React,{useContext} from 'react'
 import {Card, CardMedia, CardContent, CardActions, Typography,IconButton} from '@material-ui/core';
 import {AddShoppingCart} from '@material-ui/icons';
 import useStyles from './Styles';
+import ShoppingContext from "../../store/itemsinCart";
 
 const Product = ({product}) => {
+    const{cart,setCart} = useContext(ShoppingContext);
+
+    const addToCart =(product.id, product.quantity) =>{
+        setCart([...cart,product.id]);
+    }
     const classes = useStyles();
     return (
         <Card className="classes.root">
@@ -21,7 +27,7 @@ const Product = ({product}) => {
             </CardContent>
             <CardActions disableSpacing className={classes.CardActions}>
                 <IconButton aria-label ="Add to Cart">
-                    <AddShoppingCart />
+                    {<AddShoppingCart onClick={()=>addToCart(product.id,1)} />}
                 </IconButton>
             </CardActions>
         </Card>
