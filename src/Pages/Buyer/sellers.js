@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import api from '../../configuration/api';
+import api from '../../Configuration/API';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import MUIDataTable from 'mui-datatables';
-import { authenticationService } from '../../services/authentication.service';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -13,28 +12,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const BuyerOrders = (props) => {
-  const [orders, setOrders] = useState([]);
+const Sellers = () => {
+  const [sellers, setSellers] = useState([]);
   const classes = useStyles();
 
-  function fetchOrdersByBuyer() {
+  useEffect(getAllSeller, []);
+
+  function getAllSeller() {
     api
-      .get(
-        'buyers/' + authenticationService.currentUserValue.userId + '/orders'
-      )
+      .get(`sellers/`)
       .then(function (response) {
-        setOrders(response.data);
+        console.log(response.data);
+        setSellers(response.data);
       })
       .catch(function (error) {
         console.log(error);
       });
   }
 
-  function HandleCancelStatus(id) {
+  function folloWSeller(id) {
     api
       .patch('orders/' + id + '/cancel')
       .then(function (response) {
-        fetchOrdersByBuyer();
+        // fetchOrdersByBuyer();
       })
       .catch(function (error) {
         console.log(error);
@@ -51,16 +51,9 @@ const BuyerOrders = (props) => {
     console.log('Row clicked');
   }
 
-  useEffect(fetchOrdersByBuyer, []);
-
-  useEffect(fetchOrdersByBuyer, []);
-
   const columns = [
     {
-      name: 'id',
-    },
-    {
-      name: 'status',
+      name: 'fullName',
     },
 
     {
@@ -74,10 +67,10 @@ const BuyerOrders = (props) => {
             <>
               <button
                 onClick={() => {
-                  HandleCancelStatus(tableMeta.rowData[0]);
+                  folloWSeller(tableMeta.rowData[0]);
                 }}
               >
-                Cancel
+                Follow
               </button>
             </>
           );
@@ -91,8 +84,8 @@ const BuyerOrders = (props) => {
       <Grid container spacing={3}>
         <Grid item xs={12} md={12} lg={12}>
           <MUIDataTable
-            title={'Order History'}
-            data={orders}
+            title={'Sellers'}
+            data={sellers}
             columns={columns}
             options={options}
           />
@@ -102,4 +95,4 @@ const BuyerOrders = (props) => {
   );
 };
 
-export default BuyerOrders;
+export default Sellers;

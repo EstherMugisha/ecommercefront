@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import api from '../configuration/api';
+import API from '../Configuration/API';
 import jwt_decode from 'jwt-decode';
 
 //slice
@@ -37,7 +37,7 @@ export const login =
   ({ username, password }) =>
   async (dispatch) => {
     try {
-      const res = await api.post('authenticate', { username, password });
+      const res = await API.post('authenticate', { username, password });
       const userData = res.data;
       dispatch(loginSuccess({ userData }));
     } catch (e) {
@@ -49,7 +49,7 @@ export const signup =
   ({ fullname, username, password, Buyer, Seller }) =>
   async (dispatch) => {
     try {
-      const res = await api.post('register', {
+      const res = await API.post('register', {
         fullname,
         username,
         password,

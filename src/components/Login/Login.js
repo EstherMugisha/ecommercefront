@@ -14,7 +14,6 @@ const LoginComponent = () => {
     const dispatch = useDispatch();
     const classes = useStyles();
     const history = useHistory();
-    const classes=useStyles();
     return (
       <Box
         display="flex"

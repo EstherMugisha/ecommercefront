@@ -48,3 +48,5 @@ const useStyles = makeStyles((theme) => ({
       flexGrow: 1,
     },
   }));
+
+  export default useStyles;

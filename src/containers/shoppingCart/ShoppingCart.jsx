@@ -1,51 +1,69 @@
-import React, {useState} from 'react'
-import { APIConfig } from '../../store/API-Config';
-import ShoppingContext from "../../store/itemsinCart";
-import {Container, Typography, Button, Grid} from '@material-ui/core'
-import useStyles from './styles';
-import cartItem from './CartItem/cartItem';
+import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import ShoppingCartProducts from '../ShoppingCartProducts/ShoppingCartProducts';
+import Addresses from '../Addresses/Addresses';
+import { Button } from '@material-ui/core';
+import api from '../../configuration/api';
+import { authenticationService } from '../../services/authentication.service';
+import cogoToast from 'cogo-toast';
+import { useHistory } from 'react-router-dom';
 
-const shoppingCart = ({props}) => {
-    const classes=useStyles();
+export const ShoppingContext = React.createContext({});
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width: '20%',
+  },
+  heading: {
+    fontSize: theme.typography.pxToRem(15),
+    fontWeight: theme.typography.fontWeightRegular,
+  },
+}));
 
-    const EmptyCart=() =>(
-        <Typography variant="subtitle1">You have no items in your shopping cart, 
-        <Link to="/" className={classes.link}> start adding some!</Link>
-        </Typography>
-    )
+const ShoppingCart = (props) => {
+  const [orderAddress, setOrderAddress] = useState({
+    shipping: null,
+    billing: null,
+  });
 
-    const FilledCart =() =>(
-        <>
-        <Grid container spacing={3}>
-            {cart.map((item)=>(
-                <Grid item xs={12} sm={4} key={item.id}>
-                  <cartItem item={item}/>
-                </Grid>
-            ))}
-        </Grid>
-        <div className={classes.cardDetails}>
-            <Typography variant="h4">
-                Subtotal: {cart.subtotal}
-                <div>
-                    <button className={classes.emptyButton} size="large" type="button" variant="contained"color="secondary" onClick={handleEmptyCart}>Empty Cart</button>
-                    <button className={classes.checkoutButton} size="large" type="button" variant="contained"color="primary">Checkout</button>
-                </div>
-            </Typography>
-        </div>
-        </>
-    )
-    if(!cart) return 'Loading ...';
-    return (
-        <Container>
-             <div className={classes.toolbar}/>
-             <Typography className={classes.title} variant={h3}> Your Shopping Cart</Typography>
-             {!cart.length ? <EmptyCart/> : <FilledCart />}
-             
-        </Container>
-       
-    )
-}
+  const [checkout, setCheckout] = useState(false);
+  const history = useHistory();
 
+  const order = () => {
+    api
+      .post(
+        'buyers/' +
+          authenticationService.currentUserValue.userId +
+          '/shoppingcart/process',
+        {
+          shippingAddress: orderAddress.shipping,
+          billingAddress: orderAddress.billing,
+        }
+      )
+      .then((response) => {
+        cogoToast.success('Successfully Ordered!');
+        history.push('/');
+      });
+  };
 
-export default shoppingCart
+  const classes = useStyles();
+  return (
+    <div className={classes.root}>
+      <ShoppingContext.Provider
+        value={{ orderAddress, setOrderAddress, checkout, setCheckout }}
+      >
+        {props.checkAgain}
+        <ShoppingCartProducts />
+        <Addresses />
+        {checkout === true ? (
+          <Button onClick={order} color="primary">
+            Checkout
+          </Button>
+        ) : (
+          <div></div>
+        )}
+      </ShoppingContext.Provider>
+    </div>
+  );
+};
+export default ShoppingCart;

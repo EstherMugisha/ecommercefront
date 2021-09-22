@@ -1,4 +1,6 @@
-import { configureStore, combineReducers } from '@reduxjs/toolkit';
+import { combineReducers } from 'redux';
+import { configureStore } from '@reduxjs/toolkit';
+
 
 import user from './user'
 

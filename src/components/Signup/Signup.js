@@ -1,22 +1,55 @@
-import React from 'react';
+import React,{useRef} from 'react';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
-import { Field, Form, Formik } from 'formik';
+import { Field, Form, Formik, useFormik } from 'formik';
 import { useHistory } from 'react-router-dom';
 import cogoToast from 'cogo-toast';
-import api from '../../configuration/api';
+import api from '../../Configuration/API';
 import useStyles from './styles'
 
 const Signup = () => {
     const classes = useStyles();
     const history = useHistory();
-  
-    const classes=useStyles();
+
+    const formik=useFormik({
+          initialValues:{ username: '', password: '', fullname: '',email:'' },
+          onSubmit(values) {
+            let seller = false;
+            let buyer = false;
+            let admin=false;
+            if (values.picked === 'seller') {
+              seller = true;
+            }
+            if (values.picked === 'buyer') {
+              buyer = true;
+            }
+            if (values.picked === 'admin') {
+              admin = true;
+            }
+            api
+              .post('users', {
+                username: values.username,
+                password: values.password,
+                name: values.fullname,
+                email:values.email,
+                seller: seller,
+                buyer: buyer,
+              })
+              .then(function (response) {
+                cogoToast.success('You have successfully registered!');
+                history.push('/');
+              });
+          },
+        onReset(values){
+          return this.initialValues;
+        }
+        })
+    
     return (
-      <Box
+      <Box 
         display="flex"
         justifyContent="center"
         alignItems="center"
@@ -24,33 +57,8 @@ const Signup = () => {
           height: '100vh',
         }}
       >
-        <Formik
-          initialValues={{ username: '', password: '', fullname: '' }}
-          onSubmit={(values) => {
-            let seller = false;
-            let buyer = false;
-            if (values.picked === 'seller') {
-              seller = true;
-            }
-            if (values.picked === 'buyer') {
-              buyer = true;
-            }
-            api
-              .post('register', {
-                username: values.username,
-                password: values.password,
-                fullName: values.fullname,
-                seller: seller,
-                buyer: buyer,
-              })
-              .then(function (response) {
-                cogoToast.success('You have successfully registerd!');
-                history.push('/');
-              });
-          }}
-        >
-          {({ isSubmitting }) => (
-            <Form>
+            {({ values }) => (
+            <Form onSubmit={formik.handleSubmit,formik.handleReset}>
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <Field name="fullname">
@@ -62,6 +70,7 @@ const Signup = () => {
                         required
                         fullWidth
                         autoFocus
+                        value={formik.values.fullname}
                         {...field}
                         type="text"
                       />
@@ -78,6 +87,7 @@ const Signup = () => {
                         required
                         fullWidth
                         autoFocus
+                        value={formik.values.username}
                         {...field}
                         type="text"
                       />
@@ -94,6 +104,7 @@ const Signup = () => {
                         required
                         fullWidth
                         autoFocus
+                        value={formik.values.password}
                         {...field}
                         type="password"
                       />
@@ -101,13 +112,34 @@ const Signup = () => {
                   </Field>
                 </Grid>
                 <Grid item xs={12}>
+                  <Field name="email">
+                    {({ field, form, meta }) => (
+                      <TextField
+                        autoComplete="email"
+                        label="email"
+                        variant="outlined"
+                        required
+                        fullWidth
+                        autoFocus
+                        value={formik.values.email}
+                        {...field}
+                        type="email"
+                      />
+                    )}
+                  </Field>
+                </Grid>
+                <Grid item xs={12}>
                   <label>
-                    <Field type="radio" name="picked" value="buyer" />
+                    <Field type="radio" name="picked" value="buyer"/>
                     Buyer
                   </label>
                   <label>
                     <Field type="radio" name="picked" value="seller" />
                     Seller
+                  </label>
+                  <label>
+                    <Field type="radio" name="picked" value="admin" />
+                    Admin
                   </label>
                 </Grid>
               </Grid>
@@ -116,6 +148,7 @@ const Signup = () => {
                 fullWidth
                 variant="contained"
                 color="primary"
+                onClick={formik.handleSubmit, formik.handleReset}
                 className={classes.submit}
               >
                 Sign Up
@@ -130,7 +163,7 @@ const Signup = () => {
               </Grid>
             </Form>
           )}
-        </Formik>
+        
       </Box>
     );
   };

@@ -1,9 +1,15 @@
-import React, { useHistory } from 'react'
-import { Switch, Route, Redirect } from 'react-router-dom';
-import Products from "../Products/Products";
+import React, { useEffect } from 'react'
+import { Switch, Route, useHistory, Redirect } from 'react-router-dom';
+import Products from "../../containers/Products/Products";
 import useStyles from './styles';
 import { authenticationService } from '../../services/authentication.service';
-import { AppBar, CssBaseline, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, CssBaseline, Toolbar, Typography, Button, Chip, Avatar, Box, Container } from '@material-ui/core';
+import Orders from '../Buyer/orders';
+import Sellers from '../Buyer/sellers'
+import { makeStyles } from '@material-ui/core';
+import Role from '../../helpers/role';
+import Reviews from '../../containers/Reviews/Reviews';
+
 
 const navStyles = makeStyles((theme) => ({
     root: {
@@ -16,7 +22,7 @@ const navStyles = makeStyles((theme) => ({
       flexGrow: 1,
     },
   }));
-const Dashboard = () => {
+const Home = () => {
  
     const classes = useStyles();
     const nav_bar = navStyles();
@@ -48,7 +54,7 @@ const Dashboard = () => {
                     <Typography variant="h6" className={nav_bar.title} onClick={() => { history.push('/') }}>
                         E-commerce Shop
                     </Typography>
-                {authethicationService.currentUserValue && (
+                {authenticationService.currentUserValue && (
                     <>
                         <Button color="inherit" onClick={() => { history.push('/buyer/orders'); }}> Check Your Orders</Button>
                         <Button color="inherit" onClick={() => { history.push('/buyer/sellers') }}>Follow Sellers</Button>
@@ -75,7 +81,7 @@ const Dashboard = () => {
         </AppBar>
         <Route path="/buyer/orders" component={Orders} />
         <Route path="/buyer/sellers" component={Sellers} />
-        <Route path="/buyer/products/:id" component={ProductPage} />
+        <Route path="/buyer/products/:id" component={Reviews} />
         <Route path="/">
           <Box component="span" m={1}>
             <Container maxWidth="md">
@@ -90,4 +96,4 @@ const Dashboard = () => {
     )
 }
 
-export default Dashboard
+export default Home

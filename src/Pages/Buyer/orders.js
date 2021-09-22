@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import api from '../../configuration/api';
+import api from '../../Configuration/API';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import MUIDataTable from 'mui-datatables';
+import { authenticationService } from '../../services/authentication.service';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -12,29 +13,28 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Sellers = () => {
-  const [sellers, setSellers] = useState([]);
+const Orders = (props) => {
+  const [orders, setOrders] = useState([]);
   const classes = useStyles();
 
-  useEffect(getAllSeller, []);
-
-  function getAllSeller() {
+  function fetchOrdersByBuyer() {
     api
-      .get(`sellers/`)
+      .get(
+        'buyers/' + authenticationService.currentUserValue.userId + '/orders'
+      )
       .then(function (response) {
-        console.log(response.data);
-        setSellers(response.data);
+        setOrders(response.data);
       })
       .catch(function (error) {
         console.log(error);
       });
   }
 
-  function folloWSeller(id) {
+  function HandleCancelStatus(id) {
     api
       .patch('orders/' + id + '/cancel')
       .then(function (response) {
-        // fetchOrdersByBuyer();
+        fetchOrdersByBuyer();
       })
       .catch(function (error) {
         console.log(error);
@@ -51,9 +51,16 @@ const Sellers = () => {
     console.log('Row clicked');
   }
 
+  useEffect(fetchOrdersByBuyer, []);
+
+  useEffect(fetchOrdersByBuyer, []);
+
   const columns = [
     {
-      name: 'fullName',
+      name: 'id',
+    },
+    {
+      name: 'status',
     },
 
     {
@@ -67,10 +74,10 @@ const Sellers = () => {
             <>
               <button
                 onClick={() => {
-                  folloWSeller(tableMeta.rowData[0]);
+                  HandleCancelStatus(tableMeta.rowData[0]);
                 }}
               >
-                Follow
+                Cancel
               </button>
             </>
           );
@@ -84,8 +91,8 @@ const Sellers = () => {
       <Grid container spacing={3}>
         <Grid item xs={12} md={12} lg={12}>
           <MUIDataTable
-            title={'Sellers'}
-            data={sellers}
+            title={'Order History'}
+            data={orders}
             columns={columns}
             options={options}
           />
@@ -95,4 +102,4 @@ const Sellers = () => {
   );
 };
 
-export default Sellers;
+export default Orders;

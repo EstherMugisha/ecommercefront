@@ -2,24 +2,38 @@ import React,{useContext} from 'react'
 import {Card, CardMedia, CardContent, CardActions, Typography,IconButton} from '@material-ui/core';
 import {AddShoppingCart} from '@material-ui/icons';
 import useStyles from './Styles';
-import ShoppingContext from "../../store/itemsinCart";
 import axios from 'axios';
-import { APIConfig } from '../../store/API-Config';
+import api from '../../Configuration/API';
+import { authenticationService } from '../../services/authentication.service';
+
 
 const Product = ({product}) => {
-    const APIs=useContext(APIConfig);
-    const cartAPI=APIs.cartAPI;
-    const addingtoCart=useRef();
-
-    const handleAddtoCart=()=>{
-        const addtocart=addingtoCart.current;
-        const data={id:addtocart['id'].value, name:addtocart['name'].value, price:addtocart['price'].value, description:addtocart['description']}
-        axios.post(cartAPI, data)
-        .then(data =>{
-            console.log('Success:',data);
-        })
+        const handleAddtoCart=()=>{
+        api
+        .get(
+          'buyers/' +
+            authenticationService.currentUserValue.userId +
+            '/shoppingcart'
+        )
+        .then(function (response) {
+          let products = response.data;
+          products.push(product);
+          api
+            .patch(
+              'buyers/' +
+                authenticationService.currentUserValue.userId +
+                '/shoppingcart',
+              products
+            )
+            // .then(function (response) {
+            //   setRefresh(true);
+            // })
+            .catch(function (error) {
+              console.log(error);
+            });
+        });
     }
-
+    console.log(product.name);
     const classes = useStyles();
     return (
         <Card className="classes.root" ref="addingtoCart">
