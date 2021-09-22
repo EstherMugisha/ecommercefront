@@ -5,8 +5,9 @@ import {Container, Typography, Button, Grid} from '@material-ui/core'
 import useStyles from './styles';
 import cartItem from './CartItem/cartItem';
 
-const shoppingCart = ({cart}) => {
+const shoppingCart = ({props}) => {
     const classes=useStyles();
+
 
     const EmptyCart=() =>(
         <Typography variant="subtitle1">You have no items in your shopping cart, 
@@ -18,8 +19,7 @@ const shoppingCart = ({cart}) => {
         <>
         <Grid container spacing={3}>
             {cart.map((item)=>(
-                <Grid item x
-                s={12} sm={4} key={item.id}>
+                <Grid item xs={12} sm={4} key={item.id}>
                   <cartItem item={item}/>
                 </Grid>
             ))}
@@ -28,7 +28,7 @@ const shoppingCart = ({cart}) => {
             <Typography variant="h4">
                 Subtotal: {cart.subtotal}
                 <div>
-                    <button className={classes.emptyButton} size="large" type="button" variant="contained"color="secondary">Empty Cart</button>
+                    <button className={classes.emptyButton} size="large" type="button" variant="contained"color="secondary" onClick={handleEmptyCart}>Empty Cart</button>
                     <button className={classes.checkoutButton} size="large" type="button" variant="contained"color="primary">Checkout</button>
                 </div>
             </Typography>

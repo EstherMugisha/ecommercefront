@@ -3,16 +3,26 @@ import {Card, CardMedia, CardContent, CardActions, Typography,IconButton} from '
 import {AddShoppingCart} from '@material-ui/icons';
 import useStyles from './Styles';
 import ShoppingContext from "../../store/itemsinCart";
+import axios from 'axios';
+import { APIConfig } from '../../store/API-Config';
 
 const Product = ({product}) => {
-    const{cart,setCart} = useContext(ShoppingContext);
+    const APIs=useContext(APIConfig);
+    const cartAPI=APIs.cartAPI;
+    const addingtoCart=useRef();
 
-    const addToCart =(product.id, product.quantity) =>{
-        setCart([...cart,product.id]);
+    const handleAddtoCart=()=>{
+        const addtocart=addingtoCart.current;
+        const data={id:addtocart['id'].value, name:addtocart['name'].value, price:addtocart['price'].value, description:addtocart['description']}
+        axios.post(cartAPI, data)
+        .then(data =>{
+            console.log('Success:',data);
+        })
     }
+
     const classes = useStyles();
     return (
-        <Card className="classes.root">
+        <Card className="classes.root" ref="addingtoCart">
             <CardMedia className={classes.media} image=''title={product.name} />
             <CardContent>
                 <div className={classes.cardContent}>
@@ -27,7 +37,7 @@ const Product = ({product}) => {
             </CardContent>
             <CardActions disableSpacing className={classes.CardActions}>
                 <IconButton aria-label ="Add to Cart">
-                    {<AddShoppingCart onClick={()=>addToCart(product.id,1)} />}
+                    {<AddShoppingCart onClick={()=>handleAddtoCart()} />}
                 </IconButton>
             </CardActions>
         </Card>

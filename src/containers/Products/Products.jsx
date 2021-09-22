@@ -3,46 +3,14 @@ import React from "react";
 import { Grid } from '@material-ui/core'
 import Product from "../../components/Product/Product";
 import useStyles from './styles'
-import { APIConfig } from "../../store/API-Config";
-import axios from 'axios';
 
-// const products = [
-//     { id: 1, name: "shoes", description: "running", price: '$5' },
-//     { id: 2, name: "laptop", description: "running", price: '10' }
-// ]
 
-const Products = (props) => {
+const Products = ({products, handleAddtoCart}) => {
     const classes=useStyles();
-    const APIs = useContext(APIConfig);
-    const productAPI = APIs.productAPI;
-
-    const [products, setProducts]=useState([]);
-    const [isLoading, setLoading]=useState(false);
-    const [error, setError]=useState();
-
-    //=====Fetching Products ==========
-    function fetchProducts(){
-        const headers={
-            'Access-Control-Allow-Origin': '*',
-        }
-        setLoading(true);
-        setError(null);
-
-        axios(productAPI, {headers})
-        .then(response => {
-            setProducts(response.data);
-        })
-        .catch(error => {
-            setError(error.message);
-            setLoading(false);
-        })
-    }
-
-    useEffect(fetchProducts, [productAPI]);
 
     const pdts = products.map((product) => (
         <Grid item key={product.id} xs={12} sm={6} md={4} lg={3}>
-            <Product product={product} />
+            <Product product={product} handleAddtoCart={handleAddtoCart}/>
         </Grid>
     ));
 
