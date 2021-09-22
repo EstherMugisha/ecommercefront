@@ -1,5 +1,5 @@
 import React from 'react';
-import SellerDashboard from "../../containers/Sellers/Sellers"
+import SellerDashboard from "../../containers/Sellers/SellerDashboard"
 
 const SellerProfile = () => {
   return (

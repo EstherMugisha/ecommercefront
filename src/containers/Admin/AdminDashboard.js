@@ -6,7 +6,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-import Sellers from '../Sellers/Sellers';
+import Sellers from './Sellers';
 import Reviews from './Reviews/Reviews';
 import { Button, Chip, Avatar } from '@material-ui/core';
 import { Link, Route, Switch, useHistory } from 'react-router-dom';

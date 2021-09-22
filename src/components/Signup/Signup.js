@@ -43,7 +43,7 @@ const Signup = () => {
                 history.push('/');
               });
           },
-        onReset(values){
+        handleReset(values){
           return this.initialValues;
         }
         })
