@@ -36,7 +36,7 @@ const Product = ({product}) => {
     console.log(product.name);
     const classes = useStyles();
     return (
-        <Card className="classes.root" ref="addingtoCart">
+        <Card className="classes.root">
             <CardMedia className={classes.media} image=''title={product.name} />
             <CardContent>
                 <div className={classes.cardContent}>

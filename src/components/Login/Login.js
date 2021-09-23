@@ -30,8 +30,7 @@ const LoginComponent = () => {
               onSubmit={(values) => {
                 dispatch(login(values)).then(() => {
                   cogoToast.success('Login Successful!');
-                  history.push('/');
-                  window.location.reload(true);
+                  history.replace('/');
                 });
               }}
             >

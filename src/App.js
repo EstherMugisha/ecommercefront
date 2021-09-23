@@ -19,7 +19,7 @@ function App() {
       {
           productAPI: base + '/products',
           userAPI: base + '/users',
-          loginAPI:base +'/authenticate'
+          authenticateAPI:base +'/authenticate'
       }
   }>
     <div>

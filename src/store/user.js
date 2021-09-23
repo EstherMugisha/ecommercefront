@@ -2,6 +2,9 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import API from '../Configuration/API';
 import jwt_decode from 'jwt-decode';
+import axios from 'axios';
+import {useContext} from 'react';
+
 
 //slice
 const slice = createSlice({
@@ -9,15 +12,19 @@ const slice = createSlice({
   initialState: {
     user: localStorage.getItem('user'),
   },
+
   reducers: {
     loginSuccess: (state, action) => {
       state.user = action.payload;
-      const token = state.user.userData.token;
-      let decoded = jwt_decode(token);
-      state.user.username = decoded.sub;
-      state.user.userId = decoded.userId;
-      state.user.role = decoded.role;
+      const token = state.jwt;
+      //let decoded = jwt_decode(token);
+      state.user.username = state.user.username;
+      state.user.userId = state.user.id;
+      state.user.role = state.user.role;
+      state.user.email = state.user.email;
+      state.user.name = state.user.name;
       state.user.token = token;
+      console.log(state.user)
       localStorage.setItem('user', JSON.stringify(state.user));
     },
     logoutSuccess: (state, action) => {
@@ -32,12 +39,11 @@ export default slice.reducer;
 
 //Actions
 const { loginSuccess, logoutSuccess, signUpSuccess } = slice.actions;
-
 export const login =
   ({ username, password }) =>
   async (dispatch) => {
     try {
-      const res = await API.post('authenticate', { username, password });
+      const res = axios.post("http://localhost:8080/authenticate", { username, password });
       const userData = res.data;
       dispatch(loginSuccess({ userData }));
     } catch (e) {
