@@ -19,7 +19,8 @@ function App() {
       {
           productAPI: base + '/products',
           userAPI: base + '/users',
-          authenticateAPI:base +'/authenticate'
+          authenticateAPI:base +'/authenticate',
+          sellerAPI: base + '/users/sellers'
       }
   }>
     <div>
@@ -33,7 +34,7 @@ function App() {
           roles={[Role.Seller]}
           component={SellerProfile}
         />
-        <PrivateRoute path="/buyer" roles={[Role.Buyer]} component={Buyer} />
+        <Route path="/buyer" roles={[Role.Buyer]} component={Buyer} />
         <Route path="/sellers/:id" component={SellerPage} />
         <Route exact path="/" component={Home} />
         <Route path="*">

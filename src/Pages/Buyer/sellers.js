@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import api from '../../Configuration/API';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import MUIDataTable from 'mui-datatables';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -16,11 +17,17 @@ const Sellers = () => {
   const [sellers, setSellers] = useState([]);
   const classes = useStyles();
 
+  const APIs=useContext(api);
+  const config =APIs.sellerAPI;
+
   useEffect(getAllSeller, []);
 
   function getAllSeller() {
-    api
-      .get(`sellers/`)
+    const headers = {
+      'Access-Control-Allow-Origin': '*',
+  }
+    axios
+      .get(config, {headers})
       .then(function (response) {
         console.log(response.data);
         setSellers(response.data);
@@ -31,7 +38,7 @@ const Sellers = () => {
   }
 
   function folloWSeller(id) {
-    api
+    axios
       .patch('orders/' + id + '/cancel')
       .then(function (response) {
         // fetchOrdersByBuyer();

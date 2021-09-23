@@ -56,17 +56,17 @@ const Home = () => {
                     </Typography>
                 {authenticationService.currentUserValue && (
                     <>
-                        <Button color="inherit" onClick={() => { history.push('/buyer/orders'); }}> Check Your Orders</Button>
-                        <Button color="inherit" onClick={() => { history.push('/buyer/sellers') }}>Follow Sellers</Button>
+                        <Button color="inherit" onClick={() => { history.push('/buyer/orders')}}> Check Your Orders</Button>
+                        <Button color="inherit" onClick={() => { history.push('/buyer/sellers'); console.log("sellers") }}>Follow Sellers</Button>
                         <Chip
-                            avatar={<Avatar></Avatar>}
-                            label={
+                                label={
                                 authenticationService.currentUserValue &&
                                 authenticationService.currentUserValue.username
                             }
                             color="primary"
                         />
 
+                        {<Avatar></Avatar>}
                         <Button color="inherit" onClick={() => { authenticationService.logout(); history.push('/'); }}> Logout</Button>
                     </>
                 )}
@@ -79,18 +79,17 @@ const Home = () => {
                 )}
             </Toolbar>
         </AppBar>
+        <Switch>
         <Route path="/buyer/orders" component={Orders} />
-        <Route path="/buyer/sellers" component={Sellers} />
+        <Route exact path="/buyer/sellers" component={Sellers} />
         <Route path="/buyer/products/:id" component={Reviews} />
-        <Route path="/">
+        <Route exact path="/">
           <Box component="span" m={1}>
             <Container maxWidth="md">
               <Products />
             </Container>
           </Box>
         </Route>
-        <Switch>
-
         </Switch>
         </>
     )
