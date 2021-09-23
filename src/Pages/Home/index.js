@@ -56,13 +56,14 @@ const Home = () => {
                     </Typography>
                 {authenticationService.currentUserValue && (
                     <>
-                        <Button color="inherit" onClick={() => { history.push('/buyer/orders'); }}> Check Your Orders</Button>
+                        <Button color="inherit" onClick={() => { history.push('/buyer/orders'); }}> Orders</Button>
                         <Button color="inherit" onClick={() => { history.push('/buyer/sellers') }}>Follow Sellers</Button>
+                        <Button color="inherit" onClick={() => { history.push('/cart') }}>Cart</Button>
                         <Chip
                             avatar={<Avatar></Avatar>}
                             label={
                                 authenticationService.currentUserValue &&
-                                authenticationService.currentUserValue.username
+                                authenticationService.currentUserValue.userData.user.username
                             }
                             color="primary"
                         />
