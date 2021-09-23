@@ -7,6 +7,9 @@ export const authenticationService = {
     user: currentUserSubject.asObservable(),
     get currentUserValue () { return currentUserSubject.value }
 };
+export const setCurrentUser = (user)=>{
+    currentUserSubject.next(user);
+}
 
 function logout() {
     // remove user from local storage to log user out

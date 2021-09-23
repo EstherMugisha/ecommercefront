@@ -42,24 +42,24 @@ const Signup = () => {
           const headers = {
             'Access-Control-Allow-Origin': '*',
         }
-          axios.post(config, {headers}, {
+          axios.post(config, {
               username: values.username,
               password: values.password,
               name: values.fullname,
               email:values.email,
               role:2
-            })
+            }, {headers})
             .then(function (response) {
               console.log("signed up", response.data)
               cogoToast.success('You have successfully registerd!');
-              history.push('/');
+              history.push('/login');
             });
 
-          axios.post(loginConfig,{headers},{
-            username:values.username,
-            password:values.password
-          })
-          .then(console.log("authenticated"))
+          // axios.post(loginConfig,{headers},{
+          //   username:values.username,
+          //   password:values.password
+          // })
+          // .then(console.log("authenticated"))
           
         }}
       >

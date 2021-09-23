@@ -4,6 +4,7 @@ import API from '../Configuration/API';
 import jwt_decode from 'jwt-decode';
 import axios from 'axios';
 import {useContext} from 'react';
+import {setCurrentUser} from '../services/authentication.service'
 
 
 //slice
@@ -26,6 +27,7 @@ const slice = createSlice({
       state.user.token = token;
       console.log(state.user)
       localStorage.setItem('user', JSON.stringify(state.user));
+      setCurrentUser(state.user);
     },
     logoutSuccess: (state, action) => {
       state.user = null;
