@@ -57,7 +57,7 @@ const Home = () => {
                 {authenticationService.currentUserValue && (
                     <>
                         <Button color="inherit" onClick={() => { history.push('/buyer/orders')}}> Check Your Orders</Button>
-                        <Button color="inherit" onClick={() => { history.push('/buyer/sellers'); console.log("sellers") }}>Follow Sellers</Button>
+                        <Button color="inherit" onClick={() => { history.push('/buyer/sellers');}}>Follow Sellers</Button>
                         <Chip
                                 label={
                                 authenticationService.currentUserValue &&

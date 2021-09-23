@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import MUIDataTable from 'mui-datatables';
 import axios from 'axios';
+import { authenticationService } from '../../services/authentication.service';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -25,11 +26,14 @@ const Sellers = () => {
   function getAllSeller() {
     const headers = {
       'Access-Control-Allow-Origin': '*',
+      'Authorization': `Bearer ${authenticationService.currentUserValue.userData.jwt}`,
   }
+
+  console.log("sellers not fetched")
     axios
-      .get(config, {headers})
+      .get('/users/sellers', {headers})
       .then(function (response) {
-        console.log(response.data);
+        console.log("sellers fetched",response.data);
         setSellers(response.data);
       })
       .catch(function (error) {
@@ -41,7 +45,6 @@ const Sellers = () => {
     axios
       .patch('orders/' + id + '/cancel')
       .then(function (response) {
-        // fetchOrdersByBuyer();
       })
       .catch(function (error) {
         console.log(error);
@@ -90,7 +93,7 @@ const Sellers = () => {
     <Container maxWidth="lg" className={classes.container}>
       <Grid container spacing={3}>
         <Grid item xs={12} md={12} lg={12}>
-          <MUIDataTable
+            <MUIDataTable
             title={'Sellers'}
             data={sellers}
             columns={columns}
