@@ -10,10 +10,18 @@ import Home from './Pages/Home/index';
 import Role from './helpers/role'
 import Admin from './Pages/admin/index'
 import SellerProfile from './Pages/seller';
-
+import api from './Configuration/API';
 
 function App() {
+  const base = 'http://localhost:8080';
   return (
+    <api.Provider value={
+      {
+          productAPI: base + '/products',
+          userAPI: base + '/users',
+          loginAPI:base +'/authenticate'
+      }
+  }>
     <div>
       <BrowserRouter>
       <Switch>
@@ -29,12 +37,12 @@ function App() {
         <Route path="/sellers/:id" component={SellerPage} />
         <Route exact path="/" component={Home} />
         <Route path="*">
-          <h1>404 Not Found</h1>
+          <h1>Page Not Found</h1>
         </Route>
       </Switch>
       </BrowserRouter>
     </div>
-    
+    </api.Provider>
   );
 }
 
